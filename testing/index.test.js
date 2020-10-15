@@ -4,7 +4,7 @@ const request = require('supertest');
 // Import your app - note the destructuring syntax.
 // That will pull "app" as a standalone variable out of 
 // the "exports" object from our index.js file.
-var {app} = require('../server/index');
+var {app} = require('../index');
 
 // Homepage test
 describe('Home page route exists', () => {
