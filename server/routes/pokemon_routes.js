@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { getPokemon } = require('../controllers/pokemon_controller')
+const { getPokemon, showPokemon , showPokemonTeam } = require('../controllers/pokemon_controller')
 
-router.get('/', getPokemon)
+router.get('/catch', getPokemon)
 
+router.get('/:id', showPokemon)
+
+router.get('/pokemonTeam', showPokemonTeam)
 
 
 
