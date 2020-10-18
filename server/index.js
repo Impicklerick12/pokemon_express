@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const mongoose = require("mongoose");
 const exphbs = require('express-handlebars');
+
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -16,6 +17,9 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+app.use( bodyParser.urlencoded({extended : true }));
+app.use( bodyParser.json() );
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
@@ -38,6 +42,22 @@ mongoose.connect(dbConn,
             console.log('Connected to database!');
         }
     });
+
+// mongoose.connect(
+//     process.env.MONGO_URI,
+//     {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//       useFindAndModify: false
+//     },
+//     err => {
+//       if (err) {
+//         console.log('err:', err);
+//       } else {
+//         console.log('MongoDB connected')
+//       }
+//     }
+//   );
 
 // Home page
 app.get('/', (req, res) => {

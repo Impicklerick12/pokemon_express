@@ -1,9 +1,23 @@
-const { getRandomNumberForPokeAPI, catchPokemon } = require('../utilities/pokemon_utilities')
+const { getAllPokemons, getPokemonById, getRandomNumberForPokeAPI, catchPokemon } = require('../utilities/pokemon_utilities')
 const axios = require('axios');
 
+// Show all pokemon we have caught
+const showPokemonTeam = async (req, res) => {
+    try {
+        const pokemons = await getAllPokemons()
+        // console.log(pokemons)
+        res.status(200).send(pokemons)
+      } catch (error) {
+        res.status(500).send({
+          error
+        })
+      }
+}
+
+// Catch a random pokemon by making api call, saving it to DB
 const getPokemon = async (req, res) => {
     try {
-        const newPokemon = await catchPokemon(req)
+        const newPokemon = await catchPokemon()
         res.status(200).send(newPokemon)
     } catch (error) {
         res.status(500).send({
@@ -11,7 +25,7 @@ const getPokemon = async (req, res) => {
         })
     }
 
-    // catchPokemon(req).save((err, post) => {
+    // catchPokemon(req).save((err, pokemon) => {
     //     if (err) {
     //         res.status(500);
     //         return res.json({
@@ -19,35 +33,22 @@ const getPokemon = async (req, res) => {
     //         })
     //     } else {
     //         res.status(200);
-    //         res.send(post)
+    //         res.send(pokemon)
     //     }
-    // }) 
-    
-    
-    // axios
-    //     .get(`https://pokeapi.co/api/v2/pokemon/${getRandomNumberForPokeAPI()}`)
-    //     .then(response => {
-    //         pokemon = response.data
-    //         // console.log(pokemon)
-
-    //         let randomPokemon = new Object()
-    //         randomPokemon.name = pokemon.name.capitalize()
-    //         randomPokemon.type1 = `${pokemon.types[0].type === undefined ? "None" : pokemon.types[0].type.name.capitalize()}`
-    //         randomPokemon.type2 = `${pokemon.types[1].type === undefined ? "None" : pokemon.types[1].type.name.capitalize()}`
-    //         res.send(randomPokemon)
-    //         // return randomPokemon
-    //     })
-    //     .catch(error => console.log(error))
+    // })
 }
 
 // Show a single pokemon by its :id in DB
-const showPokemon = (req, res) => {
-
-}
-
-// Show all pokemon we have caught
-const showPokemonTeam = (req, res) => {
-
+const showPokemon = async (req, res) => {
+    try {
+        const pokemon = await getPokemonById(req)
+        // console.log(pokemons)
+        res.status(200).send(pokemon)
+      } catch (error) {
+        res.status(500).send({
+          error
+        })
+      }
 }
 
 module.exports = {

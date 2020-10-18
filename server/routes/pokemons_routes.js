@@ -5,9 +5,11 @@ const { getPokemon, showPokemon , showPokemonTeam } = require('../controllers/po
 
 router.get('/catch', getPokemon)
 
+router.get('/team', showPokemonTeam)
+
 router.get('/:id', showPokemon)
 
-router.get('/pokemonTeam', showPokemonTeam)
+
 
 
 
