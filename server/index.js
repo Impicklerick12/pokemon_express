@@ -1,17 +1,32 @@
 const express = require('express');
+
 const axios = require('axios');
 const mongoose = require("mongoose");
-const app = express();
-const port = 3000;
+const exphbs = require('express-handlebars');
+const bodyParser = require("body-parser");
 
-const pokemonRouter = require('./server/routes/pokemon_routes')
+const app = express();
+const port = process.env.port || 3000;
+
+const pokemonRouter = require('./routes/pokemons_routes')
+
+// Middleware that passes incoming data to json: instead of bodyparser
+// Allows access to req.body
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
 const dbConn = 'mongodb://localhost/pokemon_express'
 // Set three properties to avoid deprecation warnings:
 // useNewUrlParser: true
 // useUnifiedTopology: true
 // useFileAndModify: false
-mongoose.connect(dbConn, {
+mongoose.connect(dbConn, 
+    {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false

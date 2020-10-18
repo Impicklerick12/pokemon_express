@@ -1,15 +1,27 @@
-const { getRandomNumberForPokeAPI, catchPokemon } = require('../utilities/utils')
+const { getRandomNumberForPokeAPI, catchPokemon } = require('../utilities/pokemon_utilities')
 const axios = require('axios');
 
 const getPokemon = async (req, res) => {
     try {
-        const newPokemon = await catchPokemon()
+        const newPokemon = await catchPokemon(req)
         res.status(200).send(newPokemon)
     } catch (error) {
         res.status(500).send({
             error
         })
     }
+
+    // catchPokemon(req).save((err, post) => {
+    //     if (err) {
+    //         res.status(500);
+    //         return res.json({
+    //             error: err.message
+    //         })
+    //     } else {
+    //         res.status(200);
+    //         res.send(post)
+    //     }
+    // }) 
     
     
     // axios

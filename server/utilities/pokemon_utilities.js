@@ -1,4 +1,5 @@
 const axios = require('axios')
+const Pokemon = require('../models/pokemon')
 
 const catchPokemon = function (req) {
     return axios
@@ -14,7 +15,7 @@ const catchPokemon = function (req) {
             randomPokemon.image = pokemon.sprites.front_default
             // res.send(randomPokemon)
             console.log(randomPokemon)
-            return randomPokemon
+            return new Pokemon(randomPokemon)
         })
         .catch(error => console.log(error))
 }
