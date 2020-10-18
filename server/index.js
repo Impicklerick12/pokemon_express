@@ -3,6 +3,8 @@ const express = require('express');
 const axios = require('axios');
 const mongoose = require("mongoose");
 const exphbs = require('express-handlebars');
+const Handlebars = require('handlebars')
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access')
 
 const bodyParser = require("body-parser");
 
@@ -21,8 +23,11 @@ app.use(express.urlencoded({
 app.use( bodyParser.urlencoded({extended : true }));
 app.use( bodyParser.json() );
 
-app.engine('handlebars', exphbs());
+app.engine('handlebars', exphbs({
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
+  }));
 app.set('view engine', 'handlebars');
+app.set('views', (__dirname + '/views'));
 
 const dbConn = 'mongodb://localhost/pokemon_express'
 // Set three properties to avoid deprecation warnings:
@@ -61,7 +66,7 @@ mongoose.connect(dbConn,
 
 // Home page
 app.get('/', (req, res) => {
-    res.send('<h1>Home page</h1>')
+    res.render('home')
 })
 
 // Pokemon routes

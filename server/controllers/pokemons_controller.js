@@ -18,7 +18,13 @@ const showPokemonTeam = async (req, res) => {
 const getPokemon = async (req, res) => {
     try {
         const newPokemon = await catchPokemon()
-        res.status(200).send(newPokemon)
+        // console.log({newPokemon})
+        // const pokemon = {}
+        // for (let key in newPokemon) {
+        //   pokemon[key] = newPokemon[key]
+        // }
+        // res.status(200).render('pokemon/catch', { newPokemon })
+        res.status(200).render('pokemon/catch', { newPokemon })
     } catch (error) {
         res.status(500).send({
             error
