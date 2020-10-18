@@ -1,0 +1,26 @@
+[
+    {
+        "_id": "5f8b9c895cda321135083385",
+        "name": "Marowak",
+        "type1": "Ground",
+        "type2": "None",
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/105.png",
+        "__v": 0
+    },
+    {
+        "_id": "5f8b9c9d86a8f111738961b5",
+        "name": "Abra",
+        "type1": "Psychic",
+        "type2": "None",
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/63.png",
+        "__v": 0
+    },
+    {
+        "_id": "5f8ba03f21e38f14e36c2a9a",
+        "name": "Clefable",
+        "type1": "Fairy",
+        "type2": "None",
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/36.png",
+        "__v": 0
+    }
+]

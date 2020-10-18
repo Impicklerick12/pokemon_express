@@ -1,17 +1,77 @@
 // Supertest is basically Postman for your tests - get hyped!
-const request = require('supertest');
+const supertest = require('supertest');
 
 // Import your app - note the destructuring syntax.
 // That will pull "app" as a standalone variable out of 
 // the "exports" object from our index.js file.
-var { app, server } = require('../index')
+const { app, server } = require('../index')
+
+const mongoose = require('mongoose');
+const dbName = "pokemonTest";
+const request = supertest(app);
+const Pokemon = require('../models/pokemon');
+const testData = require('./testData.json')
+
+beforeAll(async (done) => {
+    //closes the dev database collection before all the tests
+    await mongoose.connection.close()
+  
+    // sets up a new database for testing
+    const url = `mongodb://localhost/${dbName}`
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false
+    });
+  
+    // seeds the database with starting pokemons
+    for (let i = 0; i < testData.length; i++) {
+      const pokemon = testData[i]
+      const defaultPokemon = new Pokemon(pokemon)
+      await defaultPokemon.save(err => {
+        if (err) {
+          console.error(err)
+        }
+      })
+    }
+    
+    done()
+})
+  
+// Handle the done() callback and force the NodeJS process to close
+// as it hangs open forever when you do server-related stuff in Jest
+// "afterAll" is a magic built-in Jest function that will run when
+// all tests & test suites have finished running.
+afterAll(async (done) => {
+
+    // Force our server reference to close:
+    server.close();
+
+    // Dumb hack to trick Jest into waiting a bit more before 
+    // it freaks out over processes hanging open. 
+    // Potentially because server.close() does not complete instantly? Not sure.
+    // This has been an issue for ExpressJS & Jest devs 
+    // for several years & solutions are vague.
+    await new Promise(resolve => setTimeout(() => resolve(), 500));
+
+    // deletes the collection pokemons from the test database
+    // TODO - uncomment below to clear collection after all tests
+    await Pokemon.deleteMany({})
+
+    // closes the test database collection after all tests
+    await mongoose.connection.close()
+
+
+    // Resolve the done() callback? Again not sure, as solutions are vague.
+    done();
+})
 
 // Homepage test
 describe('Home page route exists', () => {
-    it('Should exist', async () => {
-        const res = await request(app).get('/');
+    it('Should exist', async (done) => {
+        const res = await request.get('/');
         expect(res.statusCode).toEqual(200);
-        // done()
+        done()
     });
 });
 
@@ -31,14 +91,10 @@ describe('Home page route exists', () => {
 // })
 
 // Testing pokemon API call
-describe('Can get JSON data from PokeApi', () => {
-    // it('should have a results property', async () => {
-    //     const res = await request(app).get('/pokemon')
-    //     expect(res.body).toHaveProperty('results')
-    // });
-    it('should find the first pokemon name', async () => {
-        const res = await request(app).get('/pokemon')
-        expect(res.body[0]).toEqual('bulbasaur')
-        // done()
+describe('Gets a random pokemon from PokeAPI', () => {
+    it('should find a pokemon name', async (done) => {
+        const res = await request.get('/catch')
+        expect(res).toBeTruthy()
+        done()
     })
 })
